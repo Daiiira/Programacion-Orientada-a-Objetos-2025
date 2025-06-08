@@ -1,0 +1,52 @@
+Hotel Paraiso Tropical;Avenida Costera 1234;341698631
+101;1;sencilla;5000;True
+102;1;sencilla;5000;True
+201;2;doble;8000;True
+202;2;doble;8000;False
+301;3;suite;12000;True
+303;3;suite;13000;True
+304;3;doble;7500;True
+401;4;sencilla;5100;False
+402;4;suite;13500;True
+Hotel Manzana Dorada;Isaac Newton 4321;4334101
+101;1;sencilla;5000;True
+102;1;sencilla;5000;True
+103;1;suite;8000;False
+201;2;doble;8000;True
+202;2;doble;8000;False
+203;2;sencilla;1000;True
+301;3;suite;12000;True
+303;3;suite;13000;True
+304;3;doble;7500;True
+401;4;sencilla;5100;False
+402;4;suite;13500;True
+403;4;suite;16000;True
+Hotel Sol De Oriente;Calle Solar 1122;11223344
+101;1;sencilla;5200;True
+102;1;doble;8300;False
+201;2;doble;7900;True
+202;2;suite;12500;True
+301;3;suite;14000;True
+302;3;suite;14500;False
+303;3;doble;7800;True
+401;4;sencilla;5000;True
+402;4;suite;15000;False
+Hotel Costa Esmeralda;Boulevard del Mar 567;22334455
+101;1;sencilla;4900;True
+102;1;sencilla;5000;False
+201;2;doble;8500;True
+202;2;doble;8000;True
+301;3;suite;13000;True
+302;3;suite;13500;True
+401;4;sencilla;5200;True
+402;4;suite;15500;False
+Hotel Altos Del Cielo;Ruta Panorámica 8910;55667788
+101;1;sencilla;5300;True
+102;1;doble;8200;False
+103;1;sencilla;5000;True
+201;2;suite;12500;True
+202;2;doble;8100;True
+301;3;suite;14000;False
+302;3;doble;7900;True
+401;4;sencilla;5150;True
+402;4;suite;16000;True
