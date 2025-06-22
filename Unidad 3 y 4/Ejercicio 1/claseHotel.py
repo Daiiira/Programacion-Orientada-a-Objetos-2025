@@ -1,109 +1,68 @@
 from claseHabitacion import Habitacion
 
 class Hotel:
-    __nombre = str
-    __direccion = str
-    __telefono = str
-    __listaHabitaciones = list
+    __nombre: str
+    __direccion: str
+    __telefono: str
+    __listaHabitaciones: list
 
-    def __init__(self, nombre, direccion, telefono):
-        self.__nombre = nombre
-        self.__direccion = direccion
-        self.__telefono = telefono
+    def __init__(self, nom, dir, tel):
+        self.__nombre = nom
+        self.__direccion = dir
+        self.__telefono = tel
         self.__listaHabitaciones = []
-    
+
     def getNombre(self):
         return self.__nombre
     def getDireccion(self):
         return self.__direccion
     def getTelefono(self):
         return self.__telefono
+    
+    def agregaHabitacion(self, num, piso, tipo, precio, dispon = True):
+        self.__listaHabitaciones.append(Habitacion(num, piso, tipo, precio, dispon))
+        
+    def ordenador(self):
+        self.__listaHabitaciones.sort()
 
-    def agregarHabitacion(self, numero, piso, tipo, precio, disponible):
+    def buscaPorNum(self, num):
         i = 0
-        unaHab = Habitacion(numero, piso, tipo, precio, disponible)
-        igual = False
-        while not igual and i < len(self.__listaHabitaciones):
-            if self.__listaHabitaciones[i].getNumero() != numero:
-                i += 1
+        encontrado = False
+        while i < len(self.__listaHabitaciones) and not encontrado:
+            if num == self.__listaHabitaciones[i].getNumero():
+                encontrado = True
             else:
-                igual = True    
-        if not igual:
-            self.__listaHabitaciones.append(unaHab)
-        elif igual:
-            print("Habitación existente, reintente con otra habitación.")
-
-    def reservaHab(self, numero):
-        bandera = False
-        i = 0
-        while not bandera and i < len(self.__listaHabitaciones):
-            if self.__listaHabitaciones[i].getNumero() != numero:
                 i += 1
-            elif self.__listaHabitaciones[i].getNumero() == numero:
-                bandera = True
-                if self.__listaHabitaciones[i].getDisp() == False:
-                    print("La habitación ya está reservada.")
-                else:
-                    self.__listaHabitaciones[i].setDisp(False)
-                    print("Reserva realizada con éxito.")
+        if not encontrado:
+            raise IndexError
+        return i
 
-    def liberarHab(self, numero):
-        bandera = False
-        i = 0
-        while not bandera and i < len(self.__listaHabitaciones):
-            if self.__listaHabitaciones[i].getNumero() != numero:
-                i += 1
-            elif self.__listaHabitaciones[i].getNumero() == numero:
-                bandera = True
-                if self.__listaHabitaciones[i].getDisp() == True:
-                    print("La habitación ya está liberada.")
-                else:
-                    self.__listaHabitaciones[i].setDisp(True)
-                    print("Liberación realizada con éxito.")
+    def getDispo(self, i):
+        return self.__listaHabitaciones[i].getDisponibilidad()
+    def setDispo(self, i, valor):
+        self.__listaHabitaciones[i].setDisponibilidad(valor)
 
-    def mostrarTipo(self, tipo):
-        i = 0
-        cadena = 'Habitaciones de tipo {}:\n'.format(tipo)
-        while i < len(self.__listaHabitaciones):
-            if self.__listaHabitaciones[i].getTipo() == tipo:
-                cadena += 'Número: {} Piso: {}\n'.format(self.__listaHabitaciones[i].getNumero(), self.__listaHabitaciones[i].getPiso())
-            i += 1
-        return cadena
+    def muestraTipos(self, tipo):
+        print(f"Habitaciones con el tipo {tipo} en el {self.getNombre()}:")
+        for habitacion in self.__listaHabitaciones:
+            if habitacion.getTipoHab() == tipo:
+                print(f"Número: {habitacion.getNumero()}. Piso: {habitacion.getPiso()}")
+
+    def muestraLibres(self):
+        print(f"- {self.getNombre()} -")
+        for i in range(1,5):  # i representa el piso
+            cant = 0
+            for j in range(len(self.__listaHabitaciones)):
+                if self.getDispo(j) and self.__listaHabitaciones[j].getPiso() == i:
+                    cant += 1
+            if cant > 1:
+                print(f"Hay {cant} habitaciones disponibles en el piso {i}.")                
+            elif cant == 1:
+                print(f"Hay solo una habitacion disponible en el piso {i}.")
+            else:
+                print(f"No hay habitaciones disponibles en el piso {i}.")
     
-    def mostrarHabsLibres(self, piso):
-        acum = 0
+    def listaInfo(self, tipo):
         for habitacion in self.__listaHabitaciones:
-            if habitacion.getPiso() == piso and habitacion.getDisp() == True:
-                acum += 1
-        if acum == 0:
-            cadena += 'No hay habitaciones libres en este piso.'
-        else:
-            cadena = 'Habitaciones libres en el piso {}:\n'.format(piso)
-            cadena += 'Número: {} Tipo: {}\n'.format(self.__listaHabitaciones[habitacion].getNumero(), self.__listaHabitaciones[habitacion].getTipo())
-            cadena += 'Total de habitaciones libres: {}\n'.format(acum)
-        return cadena
-    
-    def mostrarPorTipo(self):
-        print("\nTipo de Habitación: Sencilla")
-        print(f"{"Número":>5} {"Piso":>5} {"Precio":>10} {"Disponibilidad":>15}")
-        for habitacion in self.__listaHabitaciones:
-            if habitacion.getTipo() == 'sencilla':
-                print(f"{habitacion.getNumero():>5} {habitacion.getPiso():>5} {habitacion.getPrecio():>10} {habitacion.getDispFormat():>15}")
-        print("\nTipo de Habitación: Doble")
-        print(f"{"Número":>5} {"Piso":>5} {"Precio":>10} {"Disponibilidad":>15}")
-        for habitacion in self.__listaHabitaciones:
-            if habitacion.getTipo() == 'doble':
-                print(f"{habitacion.getNumero():>5} {habitacion.getPiso():>5} {habitacion.getPrecio():>10} {habitacion.getDispFormat():>15}")
-        print("\nTipo de Habitación: Suite")
-        print(f"{"Número":>5} {"Piso":>5} {"Precio":>10} {"Disponibilidad":>15}")
-        for habitacion in self.__listaHabitaciones:
-            if habitacion.getTipo() == 'suite':
-                print(f"{habitacion.getNumero():>5} {habitacion.getPiso():>5} {habitacion.getPrecio():>10} {habitacion.getDispFormat():>15}")
-
-    def __str__(self):    
-        cadena = 'Hotel: \n'.format(self.__nombre)
-        cadena += 'Direccion: {} Teléfono: {}'.format(self.__direccion, self.__telefono)
-        cadena += '\nLista de Habitaciones:\n'
-        for habitacion in self.__listaHabitaciones:
-            cadena += str(habitacion) + '\n'
-        return cadena
+            if tipo == habitacion.getTipoHab():
+                print(habitacion)

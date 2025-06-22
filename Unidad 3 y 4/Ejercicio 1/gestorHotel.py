@@ -1,116 +1,69 @@
+from claseHabitacion import Habitacion
 from claseHotel import Hotel
 import csv
 
-class GestorHotel:
-    __listaHotel: list
+class GestorHoteles:
+    __listaHoteles: list
 
     def __init__(self):
-        self.__listaHotel = []
+        self.__listaHoteles = []
 
-    def cargarArchivo(self):
+    def agregaHotel(self, unHotel):
+        self.__listaHoteles.append(unHotel)
+
+    def agregaHab(self, nomb, num, piso, tipo, prec, disp):
+        i = self.buscaPorNombre(nomb)
+        self.__listaHoteles[i].agregaHabitacion(num, piso, tipo, prec, disp)
+        self.__listaHoteles[i].ordenador()
+
+    def buscaPorNombre(self, nom):
         i = 0
-        archivo = open('Hoteles.csv')
-        reader = csv.reader(archivo, delimiter=';')
-        for row in reader:
-            if len(row) == 3:
-                hotel = Hotel(row[0], row[1], row[2])
-                self.__listaHotel.append(hotel)
+        encontrado = False
+        while i< len(self.__listaHoteles) and not encontrado:
+            if self.__listaHoteles[i].getNombre().lower() == nom.lower():
+                encontrado = True
+            else:
                 i += 1
-            elif len(row) == 5:
-                num = int(row[0])
-                piso = int(row[1])
-                tipo = row[2]
-                precio = float(row[3])
-                if row[4] == "True":
-                    disp = True
-                elif row[4] == "False":
-                    disp = False
-                self.__listaHotel[i-1].agregarHab(num, piso, tipo, precio, disp)
-        archivo.close()
-        print("Se cargaron los datos.")
+        if not encontrado:
+            raise IndexError
+        return i
 
-    def agregarHab(self, i):
-        bandera = True
-        op = "s"
-        while bandera:
-            if op == "s":
-                print("\nIngrese los datos de la habitacion. La disponibilidad siempre sera SI")
-                num = int(input("Numero: "))
-                piso = int(str(num)[0])
-                tipo = input("Tipo: ")
-                precio = float(input("Precio: "))
-                disp = True
-                self.__listaHotel[i].agregarHab(num, piso, tipo.lower(), precio, disp)
-                op = input("Habitacion Cargada. ¿Desea continuar con la carga? (s/n): ")
-                op = op.lower()
-            elif op == "n":
-                print("Fin.")
-                bandera = False
+    def inciso1(self, xnomb):
+        indice = self.buscaPorNombre(xnomb)
+        xnum = int(input("Ingrese el numero: "))
+        xpiso = int(input("Ingrese piso: "))
+        xtipo = input("Ingrese tipo: ")
+        xprec = float(input("Ingrese precio por noche: "))
+        self.__listaHoteles[indice].agregaHabitacion(xnum, xpiso, xtipo, xprec)
+        self.__listaHoteles[indice].ordenador()
+        print("Habitacion agregada.")
     
-    def reservarHab(self, i):
-        band = True
-        op = "s"
-        while band:
-            if op == "s":
-                num = int(input("\nIngrese numero de habitacion a reservar: "))
-                self.__listaHotel[i].reservarHab(num)
-                op = input("¿Quiere realizar otra reserva? (s/n): ")
-                op.lower()
-            elif op == "n":
-                print("Volviendo...")
-                band = False
-            else:
-                print("Opcion Incorrecta.")
-                op = input("¿Quiere liberar otra habitacion? (s/n)")
-                op.lower()
-    
-    def liberarHab(self, i):
-        band = True
-        op = "s"
-        while band:
-            if op == "s":
-                num = int(input("\nIngrese numero de habitacion a liberar: "))
-                self.__listaHotel[i].liberarHab(num)
-                op = input("¿Quiere liberar otra habitacion? (s/n): ")
-                op.lower()
-            elif op == "n":
-                print("Volviendo...")
-                band = False
-            else:
-                print("Opcion Incorrecta.")
-                op = input("¿Quiere liberar otra habitacion? (s/n)")
-                op.lower()
-    
-    def mostrarPorTipo(self, i):
-        band = True
-        op = "s"
-        while band:
-            if op == "s":
-                tipo = input("\nIngrese el tipo de habitacion a buscar: ")
-                tipo.lower()
-                self.__listaHotel[i].mostrarPorTipo(tipo)
-                op = input("¿Quiere elegir otro tipo? (s/n): ")
-            elif op == "n":
-                print("Volviendo...")
-                band = False
-            else:
-                print("Opcion Incorrecta.")
-                op = input("¿Quiere buscar otro tipo de habitación? (s/n)")
-                op.lower()
+    def inciso2(self, xnom, xnum):
+        indice = self.buscaPorNombre(xnom)
+        subindice = self.__listaHoteles[indice].buscaPorNum(xnum)
+        disponible = self.__listaHoteles[indice].getDispo(subindice)
+        if disponible == True:
+            self.__listaHoteles[indice].setDispo(subindice, 0)
+            print(f"Habitación {xnum} reservada exitosamente anasheee.")
+        else:
+            print(f"Habitación {xnum} ya reservada.")
 
-    def mostrarLibresPorPiso(self, i):
-        band = True
-        op = "s"
-        while band:
-            if op == "s":
-                piso = int(input("Ingrese un piso: "))
-                self.__listaHotel[i].mostrarLibresPorPiso(piso)
-                op = input("¿Quiere revisar otro piso? (s/n): ")
-                op.lower()
-            elif op == "n":
-                print("Volviendo...")
-                band = False
-            else:
-                print("Opcion Incorrecta.")
-                op = input("¿Quiere seleccionar otro piso? (s/n)")
-                op.lower()
+    def inciso3(self, xnom, xnum):
+        indice = self.buscaPorNombre(xnom)
+        subindice = self.__listaHoteles[indice].buscaPorNum(xnum)
+        self.__listaHoteles[indice].setDispo(subindice, 1)
+        print(f"Habitación {xnum} liberada.")
+
+    def inciso4(self, xtipo):
+        for hotel in self.__listaHoteles:
+            hotel.muestraTipos(xtipo, hotel.getNombre())
+
+    def inciso5(self):
+        for hotel in self.__listaHoteles:
+            hotel.muestraLibres()
+        
+    def inciso6(self):
+        for tipo in ['doble','sencilla','suite']:
+            print(f"Tipo de habitacion: {tipo}")
+            for hotel in self.__listaHoteles:
+                hotel.listaInfo(tipo)

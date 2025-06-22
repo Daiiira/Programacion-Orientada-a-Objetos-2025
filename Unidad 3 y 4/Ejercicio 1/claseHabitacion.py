@@ -1,41 +1,40 @@
 class Habitacion:
-    __numero = int
-    __piso = int
-    __tipoHab = str             #sencilla, doble, suite
-    __precioNoche = float
-    __dispo = bool
+    __numero: int
+    __piso: int
+    __tipoHab: str
+    __precioNoche: float
+    __disponibilidad: bool
 
-    def __init__(self, numero, piso, tipoHab, precioNoche, dispo):
-        self.__numero = numero
+    def __init__(self, num, piso, tipo, precio, dispo):
+        self.__numero = num
         self.__piso = piso
-        self.__tipoHab = tipoHab
-        self.__precioNoche = precioNoche
-        self.__dispo = dispo
+        self.__tipoHab = tipo
+        self.__precioNoche = precio
+        self.__disponibilidad = dispo
 
     def getNumero(self):
         return self.__numero
     def getPiso(self):
         return self.__piso
-    def getTipo(self):
+    def getTipoHab(self):
         return self.__tipoHab
-    def getPrecio(self):
+    def getPrecioNoche(self):
         return self.__precioNoche
-    def getDisp(self):
-        return self.__dispo
+
+    def setDisponibilidad(self, valor):
+        if valor == 0:
+            self.__disponibilidad = False
+        else:
+            self.__disponibilidad = True
+    def getDisponibilidad(self):
+        return self.__disponibilidad
     
-    def getDispFormat(self):
-        disp = ""
-        if self.__dispo == True:
-            disp = "Disponible"
-        elif self.__dispo == False:
-            disp = "Reservada"
-        return disp
-    
-    def setDisp(self, disp):
-        self.__dispo = bool(disp)
+    def __lt__(self, otro):
+        return self.getNumero() < otro.getNumero()
 
     def __str__(self):
-        cadena = 'Número de Habitación: {} Piso: {}\n'.format(self.__numero, self.__piso)
-        cadena += 'Tipo de Habitación: {} Precio por noche: {}\n'.format(self.__tipoHab, self.__precioNoche)
-        cadena += 'Disponibilidad: {}'.format(self.__dispo)
-        return cadena
+        if self.getDisponibilidad() == True:
+            dispo = 'Disponible'
+        else:
+            dispo = 'Indisponible'
+        return f"{self.getNumero()} - {self.getPiso()} - {self.getPrecioNoche()} - {dispo}"
